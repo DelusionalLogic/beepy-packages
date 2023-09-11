@@ -1,0 +1,52 @@
+# Maintainer: Jesper Jensen <delusionallogic at gmail dot com>
+
+_pkgbase='beepy-kbd'
+pkgname="${_pkgbase}-git-dkms"
+pkgver=74
+pkgrel=1
+pkgdesc='DRM kernel driver for 2.7" 400x240 Sharp memory LCD panel.'
+arch=('any')
+url='https://github.com/ardangelo/beepberry-keyboard-driver'
+license=('GPL2')
+depends=('dkms')
+makedepends=('git')
+optdepends=()
+provides=("${_pkgbase}")
+conflicts=("${_pkgbase}")
+source=(
+	"${_pkgbase}::git+https://github.com/ardangelo/beepberry-keyboard-driver.git"
+	'dkms.conf'
+	'dkms.post_install'
+	'dkms.post_remove'
+	'dkms.post_build'
+)
+md5sums=(
+	'SKIP'
+	'SKIP'
+	'SKIP'
+	'SKIP'
+	'SKIP'
+)
+
+pkgver() {
+	cd "$srcdir/$_pkgbase"
+	git rev-list --count HEAD
+}
+
+package() {
+	install -Dm644 ${_pkgbase}/beepy-kbd.map "${pkgdir}"/usr/share/kbd/keymaps/beepy-kbd.map
+
+	# Copy dkms.conf
+	install -Dm644 dkms.conf "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.conf
+	install -Dm755 dkms.post_install "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.post_install
+	install -Dm755 dkms.post_remove "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.post_remove
+	install -Dm755 dkms.post_build "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.post_build
+
+	# Set name and version
+	sed -e "s/@_PKGBASE@/${_pkgbase}/" \
+		-e "s/@PKGVER@/${pkgver}/" \
+		-i "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.conf
+
+	# Copy sources (including Makefile)
+	cp -r ${_pkgbase}/* "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/
+}

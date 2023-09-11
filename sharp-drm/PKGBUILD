@@ -1,0 +1,50 @@
+# Maintainer: Jesper Jensen <delusionallogic at gmail dot com>
+
+_pkgbase='sharp-drm'
+pkgname="${_pkgbase}-git-dkms"
+pkgver=47
+pkgrel=1
+pkgdesc='DRM kernel driver for 2.7" 400x240 Sharp memory LCD panel.'
+arch=('any')
+url='https://github.com/ardangelo/sharp-drm-driver'
+license=('GPL2')
+depends=('dkms')
+makedepends=('git')
+optdepends=()
+provides=("${_pkgbase}")
+conflicts=("${_pkgbase}")
+source=(
+	"git+https://github.com/ardangelo/${_pkgbase}-driver.git"
+	'dkms.conf'
+	'dkms.post_install'
+	'dkms.post_remove'
+	'dkms.post_build'
+)
+md5sums=(
+	'SKIP'
+	'SKIP'
+	'SKIP'
+	'SKIP'
+	'SKIP'
+)
+
+pkgver() {
+	cd "$srcdir/$_pkgbase-driver"
+	git rev-list --count HEAD
+}
+
+package() {
+	# Copy dkms.conf
+	install -Dm644 dkms.conf "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.conf
+	install -Dm755 dkms.post_install "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.post_install
+	install -Dm755 dkms.post_remove "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.post_remove
+	install -Dm755 dkms.post_build "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.post_build
+
+	# Set name and version
+	sed -e "s/@_PKGBASE@/${_pkgbase}/" \
+		-e "s/@PKGVER@/${pkgver}/" \
+		-i "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.conf
+
+	# Copy sources (including Makefile)
+	cp -r ${_pkgbase}-driver/* "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/
+}
