@@ -20,13 +20,11 @@ source=(
 	'dkms.post_remove'
 	'dkms.post_build'
 )
-md5sums=(
-	'SKIP'
-	'SKIP'
-	'SKIP'
-	'SKIP'
-	'SKIP'
-)
+md5sums=('SKIP'
+         'bc114742ef45342bc0d88e4eab822e0a'
+         '78302e5fe2b5bd64bd72c9cc752a774f'
+         '436c325e76da5a64d688d3e28525320f'
+         'e62ba329005fc20900c6d4f60f4305e4')
 
 pkgver() {
 	cd "$srcdir/$_pkgbase-driver"

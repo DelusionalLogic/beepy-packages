@@ -20,13 +20,11 @@ source=(
 	'dkms.post_remove'
 	'dkms.post_build'
 )
-md5sums=(
-	'SKIP'
-	'SKIP'
-	'SKIP'
-	'SKIP'
-	'SKIP'
-)
+md5sums=('SKIP'
+         'bc114742ef45342bc0d88e4eab822e0a'
+         '7e1d73a887c541db68f16071b10fbd0e'
+         '37b2bdcd621fe15c84b034669863c95c'
+         '030ddbc214e7494bb8e0c1d8a42972d0')
 
 pkgver() {
 	cd "$srcdir/$_pkgbase"
