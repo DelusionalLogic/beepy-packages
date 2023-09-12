@@ -2,7 +2,7 @@
 
 _pkgbase='beepy-kbd'
 pkgname="${_pkgbase}-git-dkms"
-pkgver=74
+pkgver=78
 pkgrel=1
 pkgdesc='DRM kernel driver for 2.7" 400x240 Sharp memory LCD panel.'
 arch=('any')
@@ -19,12 +19,14 @@ source=(
 	'dkms.post_install'
 	'dkms.post_remove'
 	'dkms.post_build'
+	'beepy-kbd.map'
 )
 md5sums=('SKIP'
          'bc114742ef45342bc0d88e4eab822e0a'
          '7e1d73a887c541db68f16071b10fbd0e'
          '37b2bdcd621fe15c84b034669863c95c'
-         '030ddbc214e7494bb8e0c1d8a42972d0')
+         '030ddbc214e7494bb8e0c1d8a42972d0'
+         '96e65bcee0319da008003bd665cfed4d')
 
 pkgver() {
 	cd "$srcdir/$_pkgbase"
@@ -32,7 +34,7 @@ pkgver() {
 }
 
 package() {
-	install -Dm644 ${_pkgbase}/beepy-kbd.map "${pkgdir}"/usr/share/kbd/keymaps/beepy-kbd.map
+	install -Dm644 beepy-kbd.map "${pkgdir}"/usr/share/kbd/keymaps/beepy-kbd.map
 
 	# Copy dkms.conf
 	install -Dm644 dkms.conf "${pkgdir}"/usr/src/${_pkgbase}-${pkgver}/dkms.conf
